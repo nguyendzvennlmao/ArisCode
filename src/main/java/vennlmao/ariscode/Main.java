@@ -32,4 +32,4 @@ public class Main extends JavaPlugin {
     public void saveCodeConfig() {
         try { codeConfig.save(codeFile); } catch (Exception e) { e.printStackTrace(); }
     }
-          }
+            }
