@@ -1,9 +1,0 @@
-codes:
-  test:
-    money: 500000
-    expiry-days: 0
-    messages:
-      chat: true
-      actionbar: false
-      success: "&aBạn đã nhận code thành công!"
-      already-claimed: "&cMỗi IP chỉ nhận được 1 lần!"
