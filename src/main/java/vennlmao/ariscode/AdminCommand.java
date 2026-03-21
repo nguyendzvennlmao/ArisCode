@@ -49,4 +49,4 @@ public class AdminCommand implements CommandExecutor {
         i.setItemMeta(meta);
         return i;
     }
-          }
+}
