@@ -53,4 +53,4 @@ public class CodeCommand implements CommandExecutor {
         if (chat) p.sendMessage(colored);
         if (action) p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(colored));
     }
-}
+            }
