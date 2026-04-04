@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -26,7 +27,15 @@ public class CodeManager {
     
     private void loadData() {
         if (!dataFile.exists()) {
-            plugin.saveResource("ariscode.yml", false);
+            try {
+                dataFile.getParentFile().mkdirs();
+                dataFile.createNewFile();
+                dataConfig = YamlConfiguration.loadConfiguration(dataFile);
+                dataConfig.save(dataFile);
+            } catch (IOException e) {
+                plugin.getLogger().warning("Khong the tao file ariscode.yml");
+                e.printStackTrace();
+            }
         }
         
         dataConfig = YamlConfiguration.loadConfiguration(dataFile);
