@@ -192,9 +192,9 @@ public class CodeManager {
     
     public int getPlayerOnlineHours(org.bukkit.entity.Player player) {
         try {
-            return player.getStatistic(org.bukkit.Statistic.PLAY_ONE_TICK) / 20 / 3600;
+            return player.getStatistic(org.bukkit.Statistic.valueOf("PLAY_ONE_MINUTE")) / 60;
         } catch (Exception e) {
             return 0;
         }
     }
-          }
+    }
