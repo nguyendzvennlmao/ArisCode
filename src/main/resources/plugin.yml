@@ -1,0 +1,43 @@
+name: ArisCode
+version: 1.0
+main: me.aris.ariscode.ArisCode
+api-version: 1.20
+folia-supported: true
+author: VennLMAO
+description: Plugin giftcode don gian, ho tro hex color va actionbar
+
+commands:
+  ariscode:
+    description: Quan ly giftcode
+    aliases: [code, acode]
+    usage: /ariscode <command>
+
+permissions:
+  ariscode.*:
+    description: Tat ca quyen
+    default: op
+    children:
+      ariscode.create: true
+      ariscode.edit: true
+      ariscode.list: true
+      ariscode.reload: true
+      ariscode.help: true
+      ariscode.give: true
+  ariscode.create:
+    description: Tao code
+    default: op
+  ariscode.edit:
+    description: Chinh sua code
+    default: op
+  ariscode.list:
+    description: Xem danh sach code
+    default: op
+  ariscode.reload:
+    description: Reload plugin
+    default: op
+  ariscode.help:
+    description: Xem help
+    default: true
+  ariscode.give:
+    description: Tang code cho nguoi khac
+    default: op
