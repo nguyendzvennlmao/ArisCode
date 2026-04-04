@@ -6,8 +6,10 @@ import me.aris.ariscode.models.GiftCode;
 import me.aris.ariscode.models.CodeType;
 import me.aris.ariscode.utils.MessageUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class CodeCommand implements CommandExecutor, TabCompleter {
@@ -69,14 +71,14 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         }
         
         manager.createGiftCode(code, type);
-        sender.sendMessage(MessageUtils.color("&a✓ Da tao ma code &e" + code + " &athanh cong!"));
+        sender.sendMessage(MessageUtils.color("&a&l✓ Da tao ma code &e&l" + code + " &a&lthanh cong!"));
         sender.sendMessage(MessageUtils.color("&7Su dung &f/ariscode edit " + code + " &7de chinh sua phan thuong"));
         return true;
     }
     
     private boolean handleEdit(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageUtils.color("&cLen chi danh cho nguoi choi!"));
+            sender.sendMessage(MessageUtils.color("&cLenh chi danh cho nguoi choi!"));
             return true;
         }
         
@@ -97,7 +99,6 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         }
         
         sender.sendMessage(MessageUtils.color("&aDang mo giao dien chinh sua cho code &e" + code));
-        // TODO: Mo GUI tai day
         return true;
     }
     
@@ -142,7 +143,7 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         manager.saveAll();
         long end = System.currentTimeMillis();
         
-        sender.sendMessage(MessageUtils.color("&a✓ Da reload cau hinh thanh cong! &7(" + (end - start) + "ms)"));
+        sender.sendMessage(MessageUtils.color("&a&l✓ Da reload cau hinh thanh cong! &7(" + (end - start) + "ms)"));
         return true;
     }
     
@@ -245,7 +246,7 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         }
         
         String broadcastMsg = plugin.getConfig().getString("Message.PlayerCodeReceived");
-        if (!broadcastMsg.isEmpty()) {
+        if (broadcastMsg != null && !broadcastMsg.isEmpty()) {
             Bukkit.broadcastMessage(MessageUtils.color(broadcastMsg.replace("<player>", player.getName())));
         }
         
@@ -270,7 +271,7 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         }
         
         for (ItemStack item : giftCode.getItems()) {
-            if (item != null && item.getType() != org.bukkit.Material.AIR) {
+            if (item != null && item.getType() != Material.AIR) {
                 player.getInventory().addItem(item.clone());
             }
         }
@@ -308,4 +309,4 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         
         return completions;
     }
-          }
+    }
