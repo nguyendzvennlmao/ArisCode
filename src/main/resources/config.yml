@@ -1,0 +1,61 @@
+# ╔══════════════════════════════════════════════════════╗
+# ║                 ArisCode v1.0                        ║
+# ║                  Author: VennLMAO                    ║
+# ║              Support: 1.20.x - 1.21.x                ║
+# ╚══════════════════════════════════════════════════════╝
+
+Settings:
+  # Kiem tra IP khi nhap code
+  IP-Check: true
+  
+  # Dinh dang code random (X = ky tu random)
+  GiftcodeFormat: "XXXX-XXXX-XXXX"
+  
+  # So luong code random tao ra
+  CodeRandom: 10
+  
+  # So lan toi da nhap code random cho 1 player
+  RandomMaxUse: 1
+  
+  # Cai dat hien thi tin nhan
+  Message:
+    # Hien thi tin nhan trong chat
+    chat: true
+    # Hien thi tin nhan tren actionbar
+    actionbar: false
+
+# Tat ca tin nhan hien thi cua plugin
+Message:
+  FormatError: "&c[&6ArisCode&c] &7Loi dinh dang, hay kiem tra lai!"
+  TypingValue: "&c[&6ArisCode&c] &7Hay nhap gia tri ban muon &8(&7Chat &c&lhuy &7de huy&8)"
+  NoPermissions: "&c[&6ArisCode&c] &7Ban khong co quyen lam dieu nay!"
+  CodeExist: "&c[&6ArisCode&c] &7Ma Code nay da ton tai!"
+  CodeNotExist: "&c[&6ArisCode&c] &7Ma Code nay khong ton tai!"
+  CodeReceived: "&c[&6ArisCode&c] &a&lChuc mung! &7Ban da nhan duoc qua tu giftcode!"
+  PlayerCodeReceived: "&c[&6ArisCode&c] &7Nguoi choi &e<player> &7vua nhap &fCode &7thanh cong!"
+  CodeList: "&c[&6ArisCode&c] &7Danh sach Code: &e<code>"
+  AlreadyUseCode: "&c[&6ArisCode&c] &7Ban da su dung ma Code nay roi!"
+  AlreadyUseCodeRandom: "&c[&6ArisCode&c] &7Ban khong the nhap loai ma Code nay nua!"
+  SaveCode: "&c[&6ArisCode&c] &a&lXin chuc mung! &7Ban da hoan tat chinh sua code!"
+  DeleteCode: "&c[&6ArisCode&c] &7Ban da xoa Code vua chinh sua!"
+  CodeNotFound: "&c[&6ArisCode&c] &7Ma Code khong ton tai hoac da het han!"
+  TypingCodeExpired: "&c[&6ArisCode&c] &7Hay nhap so ngay &fCode &7het han &8(&7Chat &c&lhuy &7de huy&8)"
+  TypingCodeMaxUse: "&c[&6ArisCode&c] &7Hay nhap so luong Code co the su dung &8(&7Chat &c&lhuy &7de huy&8)"
+  CodeIpUsed: "&c[&6ArisCode&c] &7Xin loi, moi &fIP &7chi duoc dung code nay 1 lan!"
+  CodeMaxUse: "&c[&6ArisCode&c] &7That dang tiec, ma Code nay da duoc dung het!"
+  RequireOnline: "&c[&6ArisCode&c] &7Can phai &fOnline &7du &c<require> &7gio de nhan Code!"
+  NotOnline: "&c[&6ArisCode&c] &7Nguoi choi nay khong online!"
+
+# Noi dung help
+  Help:
+  - "&#ff5555&m&#ff8888&l                                           &#ff5555&m"
+  - "&#ffaa00&l✦ &6&lARISCODE &f&lHELP MENU &7&l- &f&lVer 1.0"
+  - "&#ffaa00&l✦ &e/ariscode create <code> &7- &fTao ma Code dung chung"
+  - "&#ffaa00&l✦ &e/ariscode create <code> random &7- &fTao ma Code Random"
+  - "&#ffaa00&l✦ &e/ariscode create <code> limit &7- &fTao ma Code gioi han"
+  - "&#ffaa00&l✦ &e/ariscode <code> <player> &7- &fTang Code cho nguoi choi"
+  - "&#ffaa00&l✦ &e/ariscode <code> &7- &fNhap ma Code de nhan qua"
+  - "&#ffaa00&l✦ &e/ariscode edit <code> &7- &fTuy chinh phan thuong"
+  - "&#ffaa00&l✦ &e/ariscode list &7- &fXem danh sach ma Code"
+  - "&#ffaa00&l✦ &e/ariscode reload &7- &fReload lam moi Plugin"
+  - "&#ff5555&m&#ff8888&l                                           &#ff5555&m"
