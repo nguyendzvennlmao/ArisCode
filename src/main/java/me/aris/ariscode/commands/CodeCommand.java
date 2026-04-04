@@ -4,6 +4,7 @@ import me.aris.ariscode.ArisCode;
 import me.aris.ariscode.managers.CodeManager;
 import me.aris.ariscode.models.GiftCode;
 import me.aris.ariscode.models.CodeType;
+import me.aris.ariscode.gui.EditGUI;
 import me.aris.ariscode.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,10 +17,12 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
     
     private final ArisCode plugin;
     private final CodeManager manager;
+    private EditGUI editGUI;
     
     public CodeCommand(ArisCode plugin) {
         this.plugin = plugin;
         this.manager = plugin.getCodeManager();
+        this.editGUI = new EditGUI(plugin);
     }
     
     @Override
@@ -98,7 +101,7 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
-        sender.sendMessage(MessageUtils.color("&aDang mo giao dien chinh sua cho code &e" + code));
+        editGUI.open((Player) sender, code);
         return true;
     }
     
@@ -114,21 +117,31 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
-        sender.sendMessage(MessageUtils.color("&6&m----------------------------------------"));
-        sender.sendMessage(MessageUtils.color("&e&lDanh sach ma code:"));
+        for (String line : plugin.getConfig().getStringList("Message.ListHeader")) {
+            sender.sendMessage(MessageUtils.color(line));
+        }
         
         for (GiftCode gc : codes.values()) {
             String type = "";
             switch (gc.getType()) {
-                case NORMAL: type = "&aNormal"; break;
-                case RANDOM: type = "&6Random"; break;
-                case LIMIT: type = "&cLimit"; break;
+                case NORMAL: type = plugin.getConfig().getString("Message.TypeNormal", "&aNormal"); break;
+                case RANDOM: type = plugin.getConfig().getString("Message.TypeRandom", "&6Random"); break;
+                case LIMIT: type = plugin.getConfig().getString("Message.TypeLimit", "&cLimit"); break;
             }
-            sender.sendMessage(MessageUtils.color("&7- &f" + gc.getCode() + " &7[" + type + "&7] &7- &b" + gc.getCurrentUse() + "&7/" + (gc.getType() == CodeType.LIMIT ? gc.getMaxUse() : gc.getLimit()) + " luot"));
+            String line = plugin.getConfig().getString("Message.ListFormat", "&7- &f<code> &7[<type>&7] &7- &b<used>&7/<max> luot");
+            line = line.replace("<code>", gc.getCode());
+            line = line.replace("<type>", type);
+            line = line.replace("<used>", String.valueOf(gc.getCurrentUse()));
+            line = line.replace("<max>", String.valueOf(gc.getType() == CodeType.LIMIT ? gc.getMaxUse() : gc.getLimit()));
+            sender.sendMessage(MessageUtils.color(line));
         }
         
-        sender.sendMessage(MessageUtils.color("&6&m----------------------------------------"));
-        sender.sendMessage(MessageUtils.color("&7Tong so: &e" + codes.size() + " &7ma code"));
+        for (String line : plugin.getConfig().getStringList("Message.ListFooter")) {
+            sender.sendMessage(MessageUtils.color(line));
+        }
+        
+        String totalLine = plugin.getConfig().getString("Message.ListTotal", "&7Tong so: &e<total> &7ma code");
+        sender.sendMessage(MessageUtils.color(totalLine.replace("<total>", String.valueOf(codes.size()))));
         return true;
     }
     
@@ -309,4 +322,4 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         
         return completions;
     }
-    }
+                     }
