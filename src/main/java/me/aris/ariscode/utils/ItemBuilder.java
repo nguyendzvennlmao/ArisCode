@@ -17,10 +17,6 @@ public class ItemBuilder {
         return new ItemStack(material, amount);
     }
     
-    public static ItemStack create(Material material, int amount, int data) {
-        return new ItemStack(material, amount, (short) data);
-    }
-    
     public static ItemStack create(Material material, String name) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -44,7 +40,7 @@ public class ItemBuilder {
     }
     
     public static ItemStack create(Material material, int amount, int data, String name) {
-        ItemStack item = new ItemStack(material, amount, (short) data);
+        ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(MessageUtils.color(name));
         item.setItemMeta(meta);
@@ -52,7 +48,7 @@ public class ItemBuilder {
     }
     
     public static ItemStack create(Material material, int amount, int data, String name, List<String> lore) {
-        ItemStack item = new ItemStack(material, amount, (short) data);
+        ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(MessageUtils.color(name));
         
