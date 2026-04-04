@@ -1,9 +1,0 @@
-name: ArisCode
-version: 1.0
-main: vennlmao.ariscode.Main
-api-version: 1.20
-author: VennLMAO
-folia-supported: true
-commands:
-  giftcode:
-    aliases: [code, ariscode]
