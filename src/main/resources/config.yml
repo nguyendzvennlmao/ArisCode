@@ -5,26 +5,54 @@
 # ╚══════════════════════════════════════════════════════╝
 
 Settings:
-  # Kiem tra IP khi nhap code
   IP-Check: true
-  
-  # Dinh dang code random (X = ky tu random)
   GiftcodeFormat: "XXXX-XXXX-XXXX"
-  
-  # So luong code random tao ra
   CodeRandom: 10
-  
-  # So lan toi da nhap code random cho 1 player
   RandomMaxUse: 1
   
-  # Cai dat hien thi tin nhan
   Message:
-    # Hien thi tin nhan trong chat
     chat: true
-    # Hien thi tin nhan tren actionbar
     actionbar: false
+  
+  Gui:
+    Title: "&8ArisCode | Chinh sua code"
+    Item:
+      Money:
+        ID: GOLD_INGOT
+        Name: "&f&lMoney: &a&l<money>"
+        Lore:
+        - "&7Click de chinh sua"
+        - "&7So tien Vault"
+      Points:
+        ID: EMERALD
+        Name: "&f&lPoints: &6&l<points>"
+        Lore:
+        - "&7Click de chinh sua"
+        - "&7So diem PlayerPoints"
+      Exp:
+        ID: EXPERIENCE_BOTTLE
+        Name: "&f&lExp: &d&l<exp>"
+        Lore:
+        - "&7Click de chinh sua"
+        - "&7Diem kinh nghiem"
+      Limit:
+        ID: PAPER
+        Name: "&f&lLimit: &c&l<limit>"
+        Lore:
+        - "&7Click de chinh sua"
+        - "&7Gioi han luot dung"
+      Random:
+        ID: PAPER
+        Name: "&f&lRandom: &6&l<random>"
+        Lore:
+        - "&7So luong code random"
+      RequireOnline:
+        ID: CLOCK
+        Name: "&f&lRequire Online: &b&l<online>h"
+        Lore:
+        - "&7Click de chinh sua"
+        - "&7So gio online yeu cau"
 
-# Tat ca tin nhan hien thi cua plugin
 Message:
   FormatError: "&c[&6ArisCode&c] &7Loi dinh dang, hay kiem tra lai!"
   TypingValue: "&c[&6ArisCode&c] &7Hay nhap gia tri ban muon &8(&7Chat &c&lhuy &7de huy&8)"
@@ -33,7 +61,6 @@ Message:
   CodeNotExist: "&c[&6ArisCode&c] &7Ma Code nay khong ton tai!"
   CodeReceived: "&c[&6ArisCode&c] &a&lChuc mung! &7Ban da nhan duoc qua tu giftcode!"
   PlayerCodeReceived: "&c[&6ArisCode&c] &7Nguoi choi &e<player> &7vua nhap &fCode &7thanh cong!"
-  CodeList: "&c[&6ArisCode&c] &7Danh sach Code: &e<code>"
   AlreadyUseCode: "&c[&6ArisCode&c] &7Ban da su dung ma Code nay roi!"
   AlreadyUseCodeRandom: "&c[&6ArisCode&c] &7Ban khong the nhap loai ma Code nay nua!"
   SaveCode: "&c[&6ArisCode&c] &a&lXin chuc mung! &7Ban da hoan tat chinh sua code!"
@@ -45,8 +72,19 @@ Message:
   CodeMaxUse: "&c[&6ArisCode&c] &7That dang tiec, ma Code nay da duoc dung het!"
   RequireOnline: "&c[&6ArisCode&c] &7Can phai &fOnline &7du &c<require> &7gio de nhan Code!"
   NotOnline: "&c[&6ArisCode&c] &7Nguoi choi nay khong online!"
+  
+  ListHeader:
+  - "&6&m----------------------------------------"
+  - "&e&lDanh sach ma code:"
+  ListFormat: "&7- &f<code> &7[<type>&7] &7- &b<used>&7/<max> luot"
+  ListFooter:
+  - "&6&m----------------------------------------"
+  ListTotal: "&7Tong so: &e<total> &7ma code"
+  
+  TypeNormal: "&aNormal"
+  TypeRandom: "&6Random"
+  TypeLimit: "&cLimit"
 
-# Noi dung help
   Help:
   - "&#ff5555&m&#ff8888&l                                           &#ff5555&m"
   - "&#ffaa00&l✦ &6&lARISCODE &f&lHELP MENU &7&l- &f&lVer 1.0"
