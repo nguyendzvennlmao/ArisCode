@@ -73,7 +73,19 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
-        manager.createGiftCode(code, type);
+        if (type == CodeType.RANDOM) {
+            List<String> randomCodes = manager.generateRandomCodes(
+                plugin.getConfigManager().getCodeRandom(),
+                plugin.getConfigManager().getGiftcodeFormat()
+            );
+            GiftCode gc = new GiftCode(code, type);
+            gc.setRandomCodes(randomCodes);
+            manager.createGiftCode(code, type);
+            manager.saveGiftCode(gc);
+        } else {
+            manager.createGiftCode(code, type);
+        }
+        
         sender.sendMessage(MessageUtils.color("&a&l✓ Da tao ma code &e&l" + code + " &a&lthanh cong!"));
         sender.sendMessage(MessageUtils.color("&7Su dung &f/ariscode edit " + code + " &7de chinh sua phan thuong"));
         return true;
@@ -187,12 +199,25 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
     }
     
     private boolean redeemCode(Player player, String code, CommandSender giver) {
-        if (!manager.exists(code)) {
+        GiftCode giftCode = null;
+        String mainCode = null;
+        
+        for (GiftCode gc : manager.getAllGiftCodes().values()) {
+            if (gc.getType() == CodeType.RANDOM && gc.getRandomCodes().contains(code)) {
+                giftCode = gc;
+                mainCode = gc.getCode();
+                break;
+            } else if (gc.getCode().equals(code)) {
+                giftCode = gc;
+                mainCode = code;
+                break;
+            }
+        }
+        
+        if (giftCode == null) {
             MessageUtils.sendMessage(player, "CodeNotFound");
             return true;
         }
-        
-        GiftCode giftCode = manager.getGiftCode(code);
         
         if (manager.isExpired(giftCode)) {
             MessageUtils.sendMessage(player, "CodeNotFound");
@@ -243,19 +268,27 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
             MessageUtils.sendMessage(player, "CodeReceived");
             
         } else if (giftCode.getType() == CodeType.RANDOM) {
-            if (giftCode.getRandomCodes().contains(code)) {
-                if (manager.hasUsed(giftCode, player.getName())) {
+            if (manager.hasUsed(giftCode, player.getName())) {
+                int maxUse = plugin.getConfigManager().getRandomMaxUse();
+                if (maxUse > 0 && manager.countElement(giftCode.getUsedPlayers(), player.getName()) >= maxUse) {
                     MessageUtils.sendMessage(player, "AlreadyUseCodeRandom");
                     return true;
                 }
-                
-                giveRewards(player, giftCode);
-                manager.addUsedPlayer(giftCode, player.getName(), playerIp);
-                MessageUtils.sendMessage(player, "CodeReceived");
-            } else {
-                MessageUtils.sendMessage(player, "CodeNotFound");
+            }
+            
+            if (plugin.getConfigManager().isIpCheck() && manager.hasUsedIp(giftCode, playerIp)) {
+                MessageUtils.sendMessage(player, "CodeIpUsed");
                 return true;
             }
+            
+            giveRewards(player, giftCode);
+            manager.addUsedPlayer(giftCode, player.getName(), playerIp);
+            
+            List<String> randomCodes = giftCode.getRandomCodes();
+            randomCodes.remove(code);
+            giftCode.setRandomCodes(randomCodes);
+            manager.saveGiftCode(giftCode);
+            MessageUtils.sendMessage(player, "CodeReceived");
         }
         
         String broadcastMsg = plugin.getConfig().getString("Message.PlayerCodeReceived");
@@ -322,4 +355,4 @@ public class CodeCommand implements CommandExecutor, TabCompleter {
         
         return completions;
     }
-                     }
+            }
