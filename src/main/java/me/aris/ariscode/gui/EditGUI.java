@@ -26,6 +26,7 @@ public class EditGUI implements Listener {
     public Map<String, String> editing;
     public Map<String, Inventory> tempInventory;
     public Map<String, String> waitingInput;
+    public Map<String, String> currentTitle;
     public int[] itemSlots;
     
     public EditGUI(ArisCode plugin) {
@@ -34,6 +35,7 @@ public class EditGUI implements Listener {
         this.editing = new HashMap<>();
         this.tempInventory = new HashMap<>();
         this.waitingInput = new HashMap<>();
+        this.currentTitle = new HashMap<>();
         this.itemSlots = new int[]{10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -46,6 +48,7 @@ public class EditGUI implements Listener {
         }
         
         String title = MessageUtils.color(plugin.getConfig().getString("Settings.Gui.Title", "&8ArisCode &7| &fChinh sua code &e" + code));
+        currentTitle.put(player.getName(), title);
         Inventory inv = Bukkit.createInventory(null, 54, title);
         
         ItemStack border = ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE, " ");
@@ -140,6 +143,11 @@ public class EditGUI implements Listener {
         if (message.equalsIgnoreCase("huy")) {
             waitingInput.remove(player.getName());
             MessageUtils.sendMessage(player, "FormatError");
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                if (editing.containsKey(player.getName())) {
+                    open(player, code);
+                }
+            });
             return;
         }
         
@@ -188,62 +196,9 @@ public class EditGUI implements Listener {
         
         plugin.getServer().getScheduler().runTask(plugin, () -> {
             if (editing.containsKey(player.getName()) && editing.get(player.getName()).equals(code)) {
-                Inventory inv = tempInventory.get(player.getName());
-                if (inv != null) {
-                    updateInventory(player, code, inv);
-                } else {
-                    open(player, code);
-                }
+                open(player, code);
             }
         });
-    }
-    
-    private void updateInventory(Player player, String code, Inventory oldInv) {
-        GiftCode giftCode = manager.getGiftCode(code);
-        if (giftCode == null) return;
-        
-        Inventory newInv = Bukkit.createInventory(null, 54, oldInv.getTitle());
-        
-        for (int i = 0; i < oldInv.getSize(); i++) {
-            ItemStack item = oldInv.getItem(i);
-            if (item != null) {
-                newInv.setItem(i, item);
-            }
-        }
-        
-        String moneyName = plugin.getConfig().getString("Settings.Gui.Item.Money.Name", "&6&lMoney &7&l> &e&l<money> &6⛁");
-        String pointsName = plugin.getConfig().getString("Settings.Gui.Item.Points.Name", "&a&lPoints &7&l> &e&l<points> &a⛁");
-        String expName = plugin.getConfig().getString("Settings.Gui.Item.Exp.Name", "&b&lExp &7&l> &e&l<exp> &b⚡");
-        String limitName = plugin.getConfig().getString("Settings.Gui.Item.Limit.Name", "&c&lLimit &7&l> &e&l<limit> &c✖");
-        String onlineName = plugin.getConfig().getString("Settings.Gui.Item.RequireOnline.Name", "&3&lOnline &7&l> &e&l<online> &3⏣");
-        
-        List<String> moneyLore = Arrays.asList("&7So tien Vault", "&eClick de chinh sua", "&7&m--------------------------------", "&e&lCurrent: &f" + (int)giftCode.getMoney());
-        List<String> pointsLore = Arrays.asList("&7So diem PlayerPoints", "&eClick de chinh sua", "&7&m--------------------------------", "&e&lCurrent: &f" + giftCode.getPoints());
-        List<String> expLore = Arrays.asList("&7Diem kinh nghiem", "&eClick de chinh sua", "&7&m--------------------------------", "&e&lCurrent: &f" + giftCode.getExp());
-        List<String> onlineLore = Arrays.asList("&7So gio online yeu cau", "&eClick de chinh sua", "&7&m--------------------------------", "&e&lCurrent: &f" + giftCode.getRequireOnline() + "h");
-        
-        ItemStack money = ItemBuilder.create(Material.GOLD_INGOT, moneyName.replace("<money>", String.valueOf((int)giftCode.getMoney())), moneyLore);
-        ItemStack points = ItemBuilder.create(Material.EMERALD, pointsName.replace("<points>", String.valueOf(giftCode.getPoints())), pointsLore);
-        ItemStack exp = ItemBuilder.create(Material.EXPERIENCE_BOTTLE, expName.replace("<exp>", String.valueOf(giftCode.getExp())), expLore);
-        ItemStack requireOnline = ItemBuilder.create(Material.CLOCK, onlineName.replace("<online>", String.valueOf(giftCode.getRequireOnline())), onlineLore);
-        
-        newInv.setItem(47, money);
-        newInv.setItem(49, points);
-        newInv.setItem(51, exp);
-        newInv.setItem(46, requireOnline);
-        
-        if (giftCode.getType() == CodeType.NORMAL) {
-            List<String> limitLore = Arrays.asList("&7Gioi han luot dung", "&eClick de chinh sua", "&7&m--------------------------------", "&e&lCurrent: &f" + giftCode.getLimit());
-            ItemStack limit = ItemBuilder.create(Material.PAPER, limitName.replace("<limit>", String.valueOf(giftCode.getLimit())), limitLore);
-            newInv.setItem(52, limit);
-        } else if (giftCode.getType() == CodeType.LIMIT) {
-            List<String> limitLore = Arrays.asList("&7Gioi han tong luot dung", "&eClick de chinh sua", "&7&m--------------------------------", "&e&lCurrent: &f" + giftCode.getMaxUse());
-            ItemStack limit = ItemBuilder.create(Material.NAME_TAG, limitName.replace("<limit>", String.valueOf(giftCode.getMaxUse())), limitLore);
-            newInv.setItem(52, limit);
-        }
-        
-        tempInventory.put(player.getName(), newInv);
-        player.openInventory(newInv);
     }
     
     @EventHandler
@@ -254,7 +209,8 @@ public class EditGUI implements Listener {
         if (!editing.containsKey(player.getName())) return;
         String code = editing.get(player.getName());
         
-        String title = MessageUtils.color(plugin.getConfig().getString("Settings.Gui.Title", "&8ArisCode &7| &fChinh sua code &e" + code));
+        String title = currentTitle.get(player.getName());
+        if (title == null) return;
         if (!event.getView().getTitle().equals(title)) return;
         
         GiftCode giftCode = manager.getGiftCode(code);
@@ -275,6 +231,7 @@ public class EditGUI implements Listener {
             manager.deleteGiftCode(code);
             editing.remove(player.getName());
             tempInventory.remove(player.getName());
+            currentTitle.remove(player.getName());
             player.closeInventory();
             MessageUtils.sendMessage(player, "DeleteCode");
             return;
@@ -329,6 +286,7 @@ public class EditGUI implements Listener {
             manager.saveGiftCode(giftCode);
             editing.remove(player.getName());
             tempInventory.remove(player.getName());
+            currentTitle.remove(player.getName());
             player.closeInventory();
             MessageUtils.sendMessage(player, "SaveCode");
             return;
@@ -341,9 +299,9 @@ public class EditGUI implements Listener {
         Player player = (Player) event.getPlayer();
         
         if (!editing.containsKey(player.getName())) return;
-        String code = editing.get(player.getName());
         
-        String title = MessageUtils.color(plugin.getConfig().getString("Settings.Gui.Title", "&8ArisCode &7| &fChinh sua code &e" + code));
+        String title = currentTitle.get(player.getName());
+        if (title == null) return;
         if (!event.getView().getTitle().equals(title)) return;
         
         if (!waitingInput.containsKey(player.getName())) {
