@@ -15,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class EditGUI implements Listener {
@@ -113,12 +112,7 @@ public class EditGUI implements Listener {
         }
         
         editing.put(player.getName(), code);
-        
-        new BukkitRunnable() {
-            public void run() {
-                player.openInventory(inv);
-            }
-        }.runTaskLater(plugin, 1L);
+        player.openInventory(inv);
     }
     
     @EventHandler
@@ -130,7 +124,8 @@ public class EditGUI implements Listener {
         if (!event.getView().getTitle().equals(title)) return;
         if (!editing.containsKey(player.getName())) return;
         
-        String code = editing.get(player.getName());
+        String data = editing.get(player.getName());
+        String code = data.contains(":") ? data.split(":")[0] : data;
         GiftCode giftCode = manager.getGiftCode(code);
         if (giftCode == null) return;
         
@@ -218,11 +213,9 @@ public class EditGUI implements Listener {
         
         String data = editing.get(player.getName());
         if (data != null && !data.contains(":")) {
-            new BukkitRunnable() {
-                public void run() {
-                    open(player, data);
-                }
-            }.runTaskLater(plugin, 2L);
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                open(player, data);
+            });
         }
     }
             }
