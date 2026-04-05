@@ -206,4 +206,14 @@ public class CodeManager {
             return 0;
         }
     }
+    
+    public int countElement(List<String> list, String element) {
+        int count = 0;
+        for (String elem : list) {
+            if (elem.equals(element)) {
+                count++;
+            }
+        }
+        return count;
     }
+        }
